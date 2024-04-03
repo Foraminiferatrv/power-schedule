@@ -1,6 +1,10 @@
+use iced::theme;
 use iced::widget::{button, column};
 use iced::window::{Icon, Settings as WindowSettings};
-use iced::{Element, Sandbox, Settings as AppSettings};
+use iced::{Background, Element, Sandbox, Settings as AppSettings};
+
+use super::components::icon::icon;
+use super::components::icon_button::icon_button;
 
 pub struct MainWindow {}
 
@@ -29,7 +33,12 @@ impl Sandbox for MainWindow {
     }
 
     fn view(&self) -> Element<'_, Self::Message> {
-        column![button("Button").on_press(Message::ShowPressed)].into()
+        column![icon_button('\u{F00E}')
+            // .style(button::StyleSheet)
+            .width(100)
+            .height(100)
+            .on_press(Message::ShowPressed)]
+        .into()
     }
 }
 
@@ -51,6 +60,9 @@ pub fn spawn_main_window() -> iced::Result {
             icon: load_icon(),
             ..WindowSettings::default()
         },
+        fonts: vec![include_bytes!("../assets/fonts/icon-font.ttf")
+            .as_slice()
+            .into()],
         ..AppSettings::default()
     };
 
