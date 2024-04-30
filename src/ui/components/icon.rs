@@ -1,7 +1,8 @@
-use iced::{widget::text, Element, Font};
+use iced::widget::{text, Text};
+use iced::Font;
 
-pub fn icon<'a, Message>(icon_code: char) -> Element<'a, Message> {
+pub fn icon<'a>(icon_code: char) -> Text<'a> {
     const ICON_FONT: Font = Font::with_name("icon-font");
 
-    text(icon_code).font(ICON_FONT).size(100).into()
+    text(icon_code).font(ICON_FONT)
 }
