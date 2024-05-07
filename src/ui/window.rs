@@ -1,8 +1,6 @@
-use std::path::Path;
-
-use iced::widget::column;
+use iced::widget::{column, container};
 use iced::window::{Icon, Settings as WindowSettings};
-use iced::{Element, Sandbox, Settings as AppSettings};
+use iced::{alignment, Element, Length, Sandbox, Settings as AppSettings};
 
 use super::components::icon_buttons::pause_button;
 
@@ -10,20 +8,20 @@ use super::components::icon_buttons::pause_button;
 pub enum Message {
     ToggleTimer,
 }
-#[derive(Debug)]
-pub struct MainWindow {
+#[derive(Debug, Default)]
+pub struct PowerSchedule {
     is_timer_active: bool,
 }
 
-impl Default for MainWindow {
+impl PowerSchedule {
     fn default() -> Self {
-        MainWindow {
+        PowerSchedule {
             is_timer_active: false,
         }
     }
 }
 
-impl Sandbox for MainWindow {
+impl Sandbox for PowerSchedule {
     type Message = Message;
 
     fn new() -> Self {
@@ -31,7 +29,11 @@ impl Sandbox for MainWindow {
     }
 
     fn title(&self) -> String {
-        String::from("Test window")
+        String::from("Power Schedule")
+    }
+
+    fn theme(&self) -> iced::Theme {
+        iced::Theme::Dark
     }
 
     fn update(&mut self, message: Self::Message) {
@@ -44,7 +46,13 @@ impl Sandbox for MainWindow {
     }
 
     fn view(&self) -> Element<'_, Self::Message> {
-        column![pause_button().on_press(Message::ToggleTimer)].into()
+        // column![pause_button().on_press(Message::ToggleTimer)].into()
+        container(pause_button().on_press(Message::ToggleTimer))
+            .height(Length::Fill)
+            .width(Length::Fill)
+            .align_x(alignment::Horizontal::Center)
+            .align_y(alignment::Vertical::Center)
+            .into()
     }
 }
 
@@ -60,7 +68,7 @@ fn load_icon(path: &str) -> Option<Icon> {
     }
 }
 
-pub fn spawn_main_window() -> iced::Result {
+pub fn app_init() -> iced::Result {
     let window_settings = AppSettings {
         window: WindowSettings {
             icon: load_icon("src/assets/icons/icon.png"),
@@ -72,5 +80,5 @@ pub fn spawn_main_window() -> iced::Result {
         ..AppSettings::default()
     };
 
-    MainWindow::run(window_settings)
+    PowerSchedule::run(window_settings)
 }
