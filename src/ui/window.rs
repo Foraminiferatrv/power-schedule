@@ -1,6 +1,8 @@
-use iced::widget::{column, container};
+use iced::widget::container;
 use iced::window::{Icon, Settings as WindowSettings};
-use iced::{alignment, Element, Length, Sandbox, Settings as AppSettings};
+use iced::{alignment, Element, Length, Sandbox, Settings as AppSettings, Size};
+use std::thread;
+use std::time::Duration;
 
 use super::components::icon_buttons::pause_button;
 
@@ -11,12 +13,14 @@ pub enum Message {
 #[derive(Debug, Default)]
 pub struct PowerSchedule {
     is_timer_active: bool,
+    shutdown_duration: Duration,
 }
 
 impl PowerSchedule {
     fn default() -> Self {
         PowerSchedule {
             is_timer_active: false,
+            shutdown_duration: Duration::from_secs(500),
         }
     }
 }
@@ -37,17 +41,29 @@ impl Sandbox for PowerSchedule {
     }
 
     fn update(&mut self, message: Self::Message) {
+        println!("Message: {:?} || Self: {:?}", message, self);
+
         match message {
             Message::ToggleTimer => {
                 self.is_timer_active = !self.is_timer_active;
-                println!("{:?}", self);
+
+                if self.is_timer_active {
+                    for _i in 0..self.shutdown_duration.as_secs() {
+                        self.shutdown_duration = self.shutdown_duration - Duration::from_secs(1);
+                        println!("{:?}", self.shutdown_duration);
+                        thread::sleep(Duration::from_secs(1));
+                        //TODO: SPawn separate thread to count down the timer
+                    }
+                    // for
+                } else {
+                }
             }
         }
     }
 
     fn view(&self) -> Element<'_, Self::Message> {
         // column![pause_button().on_press(Message::ToggleTimer)].into()
-        container(pause_button().on_press(Message::ToggleTimer))
+        container(pause_button(self.is_timer_active).on_press(Message::ToggleTimer))
             .height(Length::Fill)
             .width(Length::Fill)
             .align_x(alignment::Horizontal::Center)
@@ -72,6 +88,8 @@ pub fn app_init() -> iced::Result {
     let window_settings = AppSettings {
         window: WindowSettings {
             icon: load_icon("src/assets/icons/icon.png"),
+            size: Size::new(600.0, 300.0),
+            resizable: false,
             ..WindowSettings::default()
         },
         fonts: vec![include_bytes!("../assets/fonts/icon-font.ttf")

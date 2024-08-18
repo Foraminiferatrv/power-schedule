@@ -9,6 +9,6 @@ edition = "2021"
 anyhow = "1.0.81"
 chrono = "0.4.37"
 confy = "0.6.1"
-iced = { version = "0.12.1", features = ["image", "debug"] }
+iced = { version = "0.12.1", features = ["image", "debug", "lazy"] }
 tray-icon = "0.13.0"
 uuid = "1.8.0"
