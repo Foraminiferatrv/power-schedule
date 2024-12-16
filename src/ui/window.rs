@@ -1,6 +1,6 @@
 use iced::widget::container;
 use iced::window::{Icon, Settings as WindowSettings};
-use iced::{alignment, Element, Length, Sandbox, Settings as AppSettings, Size};
+use iced::{alignment, Element, Length, Settings as AppSettings, Size};
 use std::thread;
 use std::time::Duration;
 
