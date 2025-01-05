@@ -1,6 +1,7 @@
 // mod ui;
 use eframe::egui;
 fn main() {
+    //create an eframe window for egui
     let native_options = eframe::NativeOptions::default();
 
     let _app = eframe::run_native(
@@ -11,7 +12,9 @@ fn main() {
 }
 
 #[derive(Default)]
-struct PowerScheduleEguiApp {}
+struct PowerScheduleEguiApp {
+    clock: chrono::offset::Local::,
+}
 
 impl PowerScheduleEguiApp {
     fn new(cc: &eframe::CreationContext<'_>) -> Self {
@@ -20,9 +23,13 @@ impl PowerScheduleEguiApp {
 }
 
 impl eframe::App for PowerScheduleEguiApp {
-    fn update(&mut self, ctx: &egui::Context, frame: &mut eframe::Frame) {
+    fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
         egui::CentralPanel::default().show(ctx, |ui| {
-            ui.heading("Hello Power Schedule!");
+            let response = ui.heading("   ");
+
+            println!("response: {:?}", response);
+            println!("Self::::::: {:?}", self.clock);
+            println!("====================================================");
         });
     }
 }
